@@ -41,7 +41,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y wget unzip
                     GRADLE_VERSION=${GRADLE_VERSION:-8.6.4}
-          wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -O gradle-${GRADLE_VERSION}-bin.zip
+          wget https://downloads.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -O gradle-${GRADLE_VERSION}-bin.zip
           unzip -q gradle-${GRADLE_VERSION}-bin.zip -d /opt
           export PATH=/opt/gradle-${GRADLE_VERSION}/bin:$PATH
           gradle --version
