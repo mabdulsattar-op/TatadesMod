@@ -1,0 +1,69 @@
+name: Build Tatade's Mod
+
+on:
+  push:
+    branches: [ '**' ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Java 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Print Java version
+      run: java -version
+
+    - name: Ensure gradlew is executable if present
+      run: |
+        if [ -f ./gradlew ]; then chmod +x ./gradlew; fi
+      shell: bash
+
+    - name: Build with Gradle
+      id: gradle_build
+      run: |
+        set -e
+        echo "Attempting to use project Gradle wrapper if present..."
+        if [ -x "./gradlew" ]; then
+          echo "Found unix gradlew; running ./gradlew build"
+          ./gradlew build --no-daemon
+        else
+          echo "Unix gradlew not found. Will install Gradle ${GRADLE_VERSION:-8.4.1} and run gradle build."
+          sudo apt-get update -y
+          sudo apt-get install -y wget unzip
+          GRADLE_VERSION=${GRADLE_VERSION:-8.4.1}
+          wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -O gradle-${GRADLE_VERSION}-bin.zip
+          unzip -q gradle-${GRADLE_VERSION}-bin.zip -d /opt
+          export PATH=/opt/gradle-${GRADLE_VERSION}/bin:$PATH
+          gradle --version
+          gradle build --no-daemon
+        fi
+      shell: bash
+
+    - name: List build output
+      run: ls -la build/libs || true
+
+    - name: Upload artifact (JAR)
+      uses: actions/upload-artifact@v4
+      with:
+        name: tatadesmod-jar
+        path: build/libs/tatadesmod-1.0.0.jar
+
+    - name: Archive full logs (on failure)
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: gradle-failure-logs
+        path: |
+          build/reports/**
+          build/logs/**
+          ./**

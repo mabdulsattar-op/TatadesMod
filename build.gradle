@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'fabric-loom' version '1.9-SNAPSHOT'
+}
+
+group = 'com.tatadesmod'
+version = '1.0.0'
+archivesBaseName = 'tatadesmod'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+    maven { url = uri('https://maven.fabricmc.net/') }
+    maven { url = uri('https://maven.quiltmc.org/repository/release/') }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.21.11"
+    mappings "net.fabricmc:yarn:1.21.11+build.1:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.14.24"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.95.5+1.21.11"
+    implementation 'com.google.code.gson:gson:2.10.1'
+}
+
+loom {
+    runConfigs {
+        client {
+            workingDirectory project.file('run')
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    from('LICENSE') {
+        into 'META-INF'
+    }
+    manifest {
+        attributes 'Specification-Title': 'Tatade\'s Mod',
+                   'Specification-Vendor': 'Tatade',
+                   'Implementation-Title': project.name,
+                   'Implementation-Version': project.version
+    }
+}
