@@ -1,5 +1,5 @@
 $ErrorActionPreference = 'Stop'
-$distVersion = 'gradle-8.6.4-bin'
+$distVersion = 'gradle-8.6-bin'
 $distUrl = "https://downloads.gradle.org/distributions/$distVersion.zip"
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $zip = Join-Path $root "$distVersion.zip"
