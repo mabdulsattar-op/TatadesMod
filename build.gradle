@@ -44,7 +44,7 @@ jar {
         into 'META-INF'
     }
     manifest {
-        attributes 'Specification-Title': 'Tatade\'s Mod',
+        attributes 'Specification-Title': 'Anticheat Test Suite',
                    'Specification-Vendor': 'Tatade',
                    'Implementation-Title': project.name,
                    'Implementation-Version': project.version

@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "tatadesmod",
+  "id": "anticheattestsuite",
   "version": "1.0.0",
-  "name": "Tatade's Mod",
-  "description": "Client-only Fabric mod as Anticheat test suite (for private testing).",
+  "name": "Anticheat Test Suite",
+  "description": "Client-only Fabric mod for reproducible anticheat testing on private test servers.",
   "authors": ["Tatade"],
   "contact": {},
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.tatadesmod.TatadesMod"
+      "com.tatadesmod.AnticheatTestSuite"
     ]
   },
   "depends": {
