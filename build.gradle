@@ -27,13 +27,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
 }
 
-loom {
-    runConfigs {
-        client {
-            workingDirectory project.file('run')
-        }
-    }
-}
+// Loom configuration: keep default run configurations to maintain compatibility with Fabric Loom version in use
+// Custom runConfigs removed to avoid compatibility issues across Loom/Gradle versions
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
