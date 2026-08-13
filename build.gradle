@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'fabric-loom' version '1.14.10'
 }
 
 group = 'com.tatadesmod'
@@ -27,13 +27,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
 }
 
-loom {
-    runConfigs {
-        client {
-            workingDirectory project.file('run')
-        }
-    }
-}
+// Loom configuration: keep default run configurations to maintain compatibility across Loom versions
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -44,7 +38,7 @@ jar {
         into 'META-INF'
     }
     manifest {
-        attributes 'Specification-Title': 'Tatade\'s Mod',
+        attributes 'Specification-Title': 'Anticheat Test Suite',
                    'Specification-Vendor': 'Tatade',
                    'Implementation-Title': project.name,
                    'Implementation-Version': project.version

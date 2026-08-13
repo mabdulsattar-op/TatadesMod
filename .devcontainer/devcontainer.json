@@ -1,0 +1,18 @@
+{
+  "name": "Anticheat Test Suite Devcontainer",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/java": {
+      "version": "21"
+    }
+  },
+  "postCreateCommand": "sudo apt-get update -y && sudo apt-get install -y unzip wget && chmod +x ./gradlew || true && ./gradlew build --no-daemon",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}

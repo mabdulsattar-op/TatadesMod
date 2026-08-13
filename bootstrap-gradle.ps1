@@ -1,35 +1,32 @@
-package com.tatadesmod.module;
+$ErrorActionPreference = 'Stop'
+$distVersion = 'gradle-9.2-bin'
+$distUrl = "https://downloads.gradle.org/distributions/$distVersion.zip"
+$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+$zip = Join-Path $root "$distVersion.zip"
+$dest = Join-Path $root 'gradle'
 
-public abstract class Module {
-    private final String name;
-    private final Category category;
-    private boolean enabled = false;
-
-    public Module(String name, Category category) {
-        this.name = name;
-        this.category = category;
+if (-Not (Test-Path $dest)) {
+    Write-Host "Downloading Gradle distribution $distUrl ..."
+    try {
+        Invoke-WebRequest -Uri $distUrl -OutFile $zip -UseBasicParsing -ErrorAction Stop
+    } catch {
+        Write-Error "Download failed: $_"
+        exit 1
     }
-
-    public String getName() { return name; }
-    public Category getCategory() { return category; }
-    public boolean isEnabled() { return enabled; }
-
-    public void toggle() {
-        enabled = !enabled;
-        if (enabled) onEnable(); else onDisable();
-    }
-
-    public void setEnabled(boolean enabled) {
-        if (this.enabled == enabled) return;
-        this.enabled = enabled;
-        if (enabled) onEnable(); else onDisable();
-    }
-
-    protected void onEnable() {}
-    protected void onDisable() {}
-    public void tick() {}
-
-    public enum Category {
-        COMBAT, VISUAL, CAMERA
-    }
+    Write-Host "Extracting to $dest ..."
+    if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
+    New-Item -ItemType Directory -Path $dest | Out-Null
+    Expand-Archive -Path $zip -DestinationPath $dest -Force
+    Remove-Item $zip -Force
 }
+
+# find inner gradle folder inside the dest directory
+$inner = Get-ChildItem -Path $dest -Directory | Where-Object { $_.Name -like 'gradle-*' } | Select-Object -First 1
+if (-not $inner) { throw "Gradle distribution not found inside $dest after extraction" }
+$bin = Join-Path $inner.FullName 'bin\gradle.bat'
+if (-not (Test-Path $bin)) { throw "gradle.bat not found at $bin" }
+
+# pass through all args
+$argList = $args -join ' '
+& "$bin" $argList
+exit $LASTEXITCODE
