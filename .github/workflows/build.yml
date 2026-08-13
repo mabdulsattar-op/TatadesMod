@@ -28,26 +28,11 @@ jobs:
         if [ -f ./gradlew ]; then chmod +x ./gradlew; fi
       shell: bash
 
-    - name: Build with Gradle
-      id: gradle_build
-      run: |
-        set -e
-        echo "Attempting to use project Gradle wrapper if present..."
-        if [ -x "./gradlew" ]; then
-          echo "Found unix gradlew; running ./gradlew build"
-          ./gradlew build --no-daemon
-        else
-          echo "Unix gradlew not found. Will install Gradle ${GRADLE_VERSION:-8.6.4} and run gradle build."
-          sudo apt-get update -y
-          sudo apt-get install -y wget unzip
-                    GRADLE_VERSION=${GRADLE_VERSION:-8.6.4}
-          wget https://downloads.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -O gradle-${GRADLE_VERSION}-bin.zip
-          unzip -q gradle-${GRADLE_VERSION}-bin.zip -d /opt
-          export PATH=/opt/gradle-${GRADLE_VERSION}/bin:$PATH
-          gradle --version
-          gradle build --no-daemon
-        fi
-      shell: bash
+    - name: Build with Gradle (use official Gradle Action)
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: '8.6.4'
+        arguments: 'build --no-daemon'
 
     - name: List build output
       run: ls -la build/libs || true
@@ -64,6 +49,6 @@ jobs:
       with:
         name: gradle-failure-logs
         path: |
-          build/reports/**
-          build/logs/**
-          ./**
+                    build/reports/**
+                    build/logs/**
+                    ./**
