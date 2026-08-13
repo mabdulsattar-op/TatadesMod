@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'fabric-loom' version '1.14.10'
 }
 
 group = 'com.tatadesmod'
@@ -27,8 +27,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
 }
 
-// Loom configuration: keep default run configurations to maintain compatibility with Fabric Loom version in use
-// Custom runConfigs removed to avoid compatibility issues across Loom/Gradle versions
+// Loom configuration: keep default run configurations to maintain compatibility across Loom versions
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
