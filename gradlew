@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-DIST_VERSION="8.6"
+DIST_VERSION="8.11"
 ZIP="$ROOT/gradle-${DIST_VERSION}-bin.zip"
 DEST="$ROOT/gradle"
 
